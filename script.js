@@ -1,37 +1,46 @@
 // //TODO
-//fix scrolling issue
 // graphics
 // sound
-//prevent alert stream --> replace with some sort of animation or graphic
 // add touch or graphic buttons for mobile and tablet users
 // timer
 //second player --> use a button to add
+//play again button
+//shooters shoot stuff
+//
+// *************************************************
+// Sections:
+// -Variables
+// -Objects
+// -Event Listeners
+// -Rendering Functions (Canvas Graphics)
+// -Game Logic Functions
+// -Scrolling Functions
+// -Run Game
+// *************************************************
 
 
 window.onload = function() {
 
+    //Variables
     var activeKey = 0;
     var canvas = document.getElementById("spaceField");
-    var container = document.getElementById("container");
     var ctx = canvas.getContext("2d");
     var dx = 0;
     var dy = 0;
-    var gameOver = false;
+    var header = document.getElementById("page-header");
+    var instructions = document.getElementById("instructions");
     var scrollKeys = {
         37: 1, //left
         38: 1, //up
         39: 1, //right
-        40: 1  //down
+        40: 1 //down
     };
     var speed = 100; // px per second
 
-    var racer = {
-        height: 10,
-        width: 15,
-        x: 10,
-        y: 10,
-        color: "#FF0000"
-    }
+    //**TESTGROUND**
+    //**************
+
+    //Objects
     var goal = {
         height: 15,
         width: 20,
@@ -40,12 +49,44 @@ window.onload = function() {
         color: "#00FF00"
     }
     var myCanvas = {
-        color: "#000000",
         xStart: 0,
         yStart: 0,
         height: 150,
-        width: 300
+        width: 300,
+        color: "#000000"
     }
+    var shooter1 = {
+        height: 5,
+        width: 10,
+        x: 75,
+        y: 145,
+        color: "#FFA500"
+    }
+    var shooter2 = {
+        height: 5,
+        width: 10,
+        x: 150,
+        y: 145,
+        color: "#FFA500"
+    }
+    var shooter3 = {
+        height: 5,
+        width: 10,
+        x: 225,
+        y: 145,
+        color: "#FFA500"
+    }
+    var shooters = [shooter1, shooter2, shooter3];
+    var racer = {
+        height: 10,
+        width: 15,
+        x: 10,
+        y: 10,
+        color: "#FF0000"
+    }
+
+    //Event Listeners
+    canvas.addEventListener("click", lockGameScreen);
 
     document.addEventListener("keydown", function(e) {
         if (activeKey == e.keyCode) return;
@@ -80,8 +121,7 @@ window.onload = function() {
         activeKey = 0;
     });
 
-    canvas.addEventListener("click", lockGameScreen);
-
+    //Rendering Functions
     function renderCanvas() {
         ctx.fillStyle = myCanvas.color;
         ctx.fillRect(myCanvas.xStart, myCanvas.yStart, myCanvas.width, myCanvas.height);
@@ -98,27 +138,40 @@ window.onload = function() {
         }
     }
 
-    function isLegalMovement() {
-        var notLeft = racer.x >= 0 || dx > 0 || dy!= 0;
-        var notRight = racer.x <= canvas.width - racer.width || dx < 0 || dy!= 0;
-        var notAbove = racer.y >= 0 || dy > 0 || dx != 0;
-        var notBelow = racer.y <= canvas.height - racer.height || dy < 0 || dx != 0;
-
-        return notLeft && notRight && notBelow && notAbove;
+    //Game Logic Functions
+    function isLegalXMovement() {
+        var notLeft = racer.x >= 0 || dx > 0;
+        var notRight = racer.x <= canvas.width - racer.width || dx < 0;
+        return notLeft && notRight;
     }
 
-    function isRacerOverlappingGoal() {
-        var xOverlap = racer.x >= goal.x;
-        var yOverlap = racer.y >= goal.y && racer.y + racer.height <= goal.y + goal.height;
+    function isLegalYMovement() {
+        var notAbove = racer.y >= 0 || dy > 0;
+        var notBelow = racer.y <= canvas.height - racer.height || dy < 0;
+        return notBelow && notAbove;
+    }
+
+    function isOverlapping(object1, object2) {
+        var xOverlap = object1.x + object1.width >= object2.x && object2.x + object2.width >= object1.x;
+        var yOverlap = object1.y >= object2.y && object1.y + object1.height <= object2.y + object2.height;
+
         return xOverlap && yOverlap;
     }
 
-    function checkWin() {
-        if (isRacerOverlappingGoal()) {
-            alert("You won!");
+    function checkCollision(checkObject, againstArray) {
+        for (var i = 0; i < againstArray.length; i++) {
+            return isOverlapping(checkObject, againstArray[i]);
         }
     }
 
+    function checkWin() {
+        if (isOverlapping(racer, goal)) {
+            instructions.textContent = "";
+            header.textContent = "You destroyed the Death Star!";
+        }
+    }
+
+    //Scrolling functions
     function preventDefault(e) {
         e = e || window.event;
         if (e.preventDefault)
@@ -136,36 +189,38 @@ window.onload = function() {
     function disableScroll() {
         if (window.addEventListener) // older FF
             window.addEventListener("DOMMouseScroll", preventDefault, false);
-        window.onwheel = preventDefault; // modern standard
-        window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
-        window.ontouchmove = preventDefault; // mobile
         document.onkeydown = preventDefaultForScrollKeys;
-    }
-
-    function lockGameScreen(){
-      disableScroll();
-      window.scrollTo(0,document.body.scrollHeight); //bottom of page
+        //only prevents keys, not wheel or touch
     }
 
     function enableScroll() {
         if (window.removeEventListener)
             window.removeEventListener("DOMMouseScroll", preventDefault, false);
-        window.onmousewheel = document.onmousewheel = null;
-        window.onwheel = null;
-        window.ontouchmove = null;
         document.onkeydown = null;
     }
 
+    function lockGameScreen() {
+        disableScroll();
+        window.scrollTo(0, document.body.scrollHeight); //bottom of page
+    }
+
+    //Run Game
     function race() {
         renderCanvas();
 
-        if (isLegalMovement()) {
-            //move racer
+        if (checkCollision(racer, shooters)) {
+            console.log("collision");
+        }
+
+        //move racer
+        if (isLegalXMovement()) {
             racer.x += dx / 60 * speed;
+        }
+        if (isLegalYMovement()) {
             racer.y += dy / 60 * speed;
         }
 
-        renderObjects([racer, goal]);
+        renderObjects([racer, goal, shooter1, shooter2, shooter3]);
 
         checkWin();
 
