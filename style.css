@@ -20,6 +20,17 @@ h4 {
     padding: 0;
     font-family: "starwars";
 }
+img{
+  display: block;
+  margin: 0 auto;
+}
+button{
+  display:block;
+  margin: 0 auto;
+  padding: 2px;
+  font-size: 14px;
+  font-family: "starwars";
+}
 #spaceField{
   height: 80vh;
   width: 80vw;
@@ -33,7 +44,7 @@ h4 {
   width: 5vw;
   background: red;
   align-self: center;
-  position: relative; 
+  position: relative;
 }
 
 #goal{

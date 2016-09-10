@@ -1,11 +1,10 @@
 // //TODO
 // graphics
-// sound
+// sound optional
 // add touch or graphic buttons for mobile and tablet users
 // timer
 //second player --> use a button to add
 //play again button
-//shooters shoot stuff
 //
 // *************************************************
 // Sections:
@@ -21,6 +20,7 @@
 
 window.onload = function() {
     //**TESTGROUND**
+
     //**************
 
     //Objects
@@ -113,13 +113,21 @@ window.onload = function() {
     var activeKey = 0;
     var hostileGamePieces = [shooter1, shooter2, shooter3, bullet11, bullet12, bullet13, bullet21, bullet22, bullet23];
     var bullets = [bullet11, bullet12, bullet13, bullet21, bullet22, bullet23];
+    var bulletSound = new Audio("sounds/blaster-firing.mp3");
+    bulletSound.loop = false;
     var canvas = document.getElementById("spaceField");
+    var container = document.getElementById("container");
     var ctx = canvas.getContext("2d");
     var dx = 0;
     var dy = 0;
+    var explosion = document.createElement("VIDEO");
+      explosion.src = "video/death star explosion.mp4";
     var gamePieces = [racer, goal, shooter1, shooter2, shooter3, bullet11, bullet12, bullet13, bullet21, bullet22, bullet23];
     var header = document.getElementById("page-header");
     var instructions = document.getElementById("instructions");
+    var playAgain = document.createElement("BUTTON");
+    playAgain.textContent = "Play Again";
+    playAgain.addEventListener("click", window.location.reload.bind(window.location));
     var scrollKeys = {
         37: 1, //left
         38: 1, //up
@@ -128,6 +136,13 @@ window.onload = function() {
     };
     var shooters = [shooter1, shooter2, shooter3];
     var speed = 100; // px per second
+    var themeSong = new Audio("sounds/theme.mp3");
+    themeSong.loop = false;
+    var vaderBreathing = new Audio("sounds/vaderbreathing.mp3");
+      vaderBreathing.loop = true;
+    var vaderImage = document.createElement("IMG");
+    vaderImage.setAttribute("src", "/images/vader.jpg");
+
 
 
 
@@ -207,6 +222,7 @@ window.onload = function() {
     }
 
     function moveBullets() {
+        bulletSound.play();
         for (var i = 0; i < bullets.length; i++) {
             if (bullets[i].y == 0) {
                 bullets[i].y = 140;
@@ -225,14 +241,27 @@ window.onload = function() {
 
     function handleCollision() {
         header.textContent = "You've been destroyed!";
+        instructions.remove();
         canvas.remove();
+        container.appendChild(vaderImage);
+        container.appendChild(playAgain);
+        vaderBreathing.play();
+        bulletSound = 0;
     }
 
     function checkWin() {
-        if (isOverlapping(racer, goal)) {
-            instructions.textContent = "";
-            header.textContent = "You destroyed the Death Star!";
-        }
+        return isOverlapping(racer, goal)
+    }
+
+    function handleWin() {
+        instructions.textContent = "";
+        header.textContent = "You destroyed the Death Star!";
+        canvas.remove();
+        themeSong.play();
+        container.appendChild(explosion);
+        container.appendChild(playAgain);
+        explosion.play();
+        bulletSound = 0;
     }
 
     //Scrolling functions
@@ -286,7 +315,9 @@ window.onload = function() {
             handleCollision();
         }
 
-        checkWin();
+        if (checkWin()) {
+            handleWin();
+        }
 
         requestAnimationFrame(race);
     }
