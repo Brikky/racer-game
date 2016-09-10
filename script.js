@@ -9,8 +9,8 @@
 //
 // *************************************************
 // Sections:
-// -Variables
 // -Objects
+// -Variables
 // -Event Listeners
 // -Rendering Functions (Canvas Graphics)
 // -Game Logic Functions
@@ -20,33 +20,58 @@
 
 
 window.onload = function() {
-
-    //Variables
-    var activeKey = 0;
-    var canvas = document.getElementById("spaceField");
-    var ctx = canvas.getContext("2d");
-    var dx = 0;
-    var dy = 0;
-    var header = document.getElementById("page-header");
-    var instructions = document.getElementById("instructions");
-    var scrollKeys = {
-        37: 1, //left
-        38: 1, //up
-        39: 1, //right
-        40: 1 //down
-    };
-    var speed = 100; // px per second
-
     //**TESTGROUND**
     //**************
 
     //Objects
+    var bullet11 = {
+        height: 5,
+        width: 2,
+        x: 79,
+        y: 100,
+        color: "#39ff14"
+    }
+    var bullet12 = {
+        height: 5,
+        width: 2,
+        x: 154,
+        y: 140,
+        color: "#39ff14"
+    }
+    var bullet13 = {
+        height: 5,
+        width: 2,
+        x: 229,
+        y: 100,
+        color: "#39ff14"
+    }
+    var bullet21 = {
+        height: 5,
+        width: 2,
+        x: 79,
+        y: 30,
+        color: "#39ff14"
+    }
+    var bullet22 = {
+        height: 5,
+        width: 2,
+        x: 154,
+        y: 60,
+        color: "#39ff14"
+    }
+    var bullet23 = {
+        height: 5,
+        width: 2,
+        x: 229,
+        y: 30,
+        color: "#39ff14"
+    }
     var goal = {
         height: 15,
         width: 20,
         x: 280,
         y: 65,
-        color: "#00FF00"
+        color: "#adff00"
     }
     var myCanvas = {
         xStart: 0,
@@ -76,7 +101,6 @@ window.onload = function() {
         y: 145,
         color: "#FFA500"
     }
-    var shooters = [shooter1, shooter2, shooter3];
     var racer = {
         height: 10,
         width: 15,
@@ -84,6 +108,28 @@ window.onload = function() {
         y: 10,
         color: "#FF0000"
     }
+
+    //Variables
+    var activeKey = 0;
+    var hostileGamePieces = [shooter1, shooter2, shooter3, bullet11, bullet12, bullet13, bullet21, bullet22, bullet23];
+    var bullets = [bullet11, bullet12, bullet13, bullet21, bullet22, bullet23];
+    var canvas = document.getElementById("spaceField");
+    var ctx = canvas.getContext("2d");
+    var dx = 0;
+    var dy = 0;
+    var gamePieces = [racer, goal, shooter1, shooter2, shooter3, bullet11, bullet12, bullet13, bullet21, bullet22, bullet23];
+    var header = document.getElementById("page-header");
+    var instructions = document.getElementById("instructions");
+    var scrollKeys = {
+        37: 1, //left
+        38: 1, //up
+        39: 1, //right
+        40: 1 //down
+    };
+    var shooters = [shooter1, shooter2, shooter3];
+    var speed = 100; // px per second
+
+
 
     //Event Listeners
     canvas.addEventListener("click", lockGameScreen);
@@ -122,6 +168,10 @@ window.onload = function() {
     });
 
     //Rendering Functions
+    function remove(id) {
+        return (elem = document.getElementById(id)).parentNode.removeChild(elem);
+    }
+
     function renderCanvas() {
         ctx.fillStyle = myCanvas.color;
         ctx.fillRect(myCanvas.xStart, myCanvas.yStart, myCanvas.width, myCanvas.height);
@@ -156,6 +206,15 @@ window.onload = function() {
 
     }
 
+    function moveBullets() {
+        for (var i = 0; i < bullets.length; i++) {
+            if (bullets[i].y == 0) {
+                bullets[i].y = 140;
+            }
+            bullets[i].y -= 1;
+        }
+    }
+
     function checkCollision(checkObject, againstArray) {
         for (var i = 0; i < againstArray.length; i++) {
             if (isOverlapping(checkObject, againstArray[i])) {
@@ -166,6 +225,7 @@ window.onload = function() {
 
     function handleCollision() {
         header.textContent = "You've been destroyed!";
+        canvas.remove();
     }
 
     function checkWin() {
@@ -219,13 +279,13 @@ window.onload = function() {
         if (isLegalYMovement()) {
             racer.y += dy / 60 * speed;
         }
+        moveBullets();
+        renderObjects(gamePieces);
 
-        renderObjects([racer, goal, shooter1, shooter2, shooter3]);
-
-        if (checkCollision(racer, shooters)) {
+        if (checkCollision(racer, hostileGamePieces)) {
             handleCollision();
         }
-        
+
         checkWin();
 
         requestAnimationFrame(race);
