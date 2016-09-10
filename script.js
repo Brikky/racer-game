@@ -152,16 +152,20 @@ window.onload = function() {
     }
 
     function isOverlapping(object1, object2) {
-        var xOverlap = object1.x + object1.width >= object2.x && object2.x + object2.width >= object1.x;
-        var yOverlap = object1.y >= object2.y && object1.y + object1.height <= object2.y + object2.height;
+        return !(object1.x + object1.width < object2.x || object2.x + object2.width < object1.x || object1.y + object1.height < object2.y || object2.y + object2.height < object1.y);
 
-        return xOverlap && yOverlap;
     }
 
     function checkCollision(checkObject, againstArray) {
         for (var i = 0; i < againstArray.length; i++) {
-            return isOverlapping(checkObject, againstArray[i]);
+            if (isOverlapping(checkObject, againstArray[i])) {
+                return true;
+            }
         }
+    }
+
+    function handleCollision() {
+        header.textContent = "You've been destroyed!";
     }
 
     function checkWin() {
@@ -208,10 +212,6 @@ window.onload = function() {
     function race() {
         renderCanvas();
 
-        if (checkCollision(racer, shooters)) {
-            console.log("collision");
-        }
-
         //move racer
         if (isLegalXMovement()) {
             racer.x += dx / 60 * speed;
@@ -222,10 +222,16 @@ window.onload = function() {
 
         renderObjects([racer, goal, shooter1, shooter2, shooter3]);
 
+        if (checkCollision(racer, shooters)) {
+            handleCollision();
+        }
+        
         checkWin();
 
         requestAnimationFrame(race);
     }
 
     requestAnimationFrame(race);
+
+
 }
