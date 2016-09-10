@@ -2,9 +2,7 @@
 // graphics
 // sound optional
 // add touch or graphic buttons for mobile and tablet users
-// timer
-//second player --> use a button to add
-//play again button
+//second player -> use a button to add
 //
 // *************************************************
 // Sections:
@@ -121,7 +119,7 @@ window.onload = function() {
     var dx = 0;
     var dy = 0;
     var explosion = document.createElement("VIDEO");
-      explosion.src = "video/death star explosion.mp4";
+    explosion.src = "video/death star explosion.mp4";
     var gamePieces = [racer, goal, shooter1, shooter2, shooter3, bullet11, bullet12, bullet13, bullet21, bullet22, bullet23];
     var header = document.getElementById("page-header");
     var instructions = document.getElementById("instructions");
@@ -139,7 +137,7 @@ window.onload = function() {
     var themeSong = new Audio("sounds/theme.mp3");
     themeSong.loop = false;
     var vaderBreathing = new Audio("sounds/vaderbreathing.mp3");
-      vaderBreathing.loop = true;
+    vaderBreathing.loop = true;
     var vaderImage = document.createElement("IMG");
     vaderImage.setAttribute("src", "/images/vader.jpg");
 
