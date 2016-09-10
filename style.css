@@ -1,0 +1,50 @@
+@font-face {
+    font-family: "starwars";
+    src: url("fonts/SpaceMono-Regular.ttf");
+}
+@font-face {
+    font-family: 'star_jedi_outlineregular';
+    src: url('fonts/starjout-webfont.woff2') format('woff2'), url('fonts/starjout-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+* {
+    text-align: center;
+}
+h1 {
+    font-family: "star_jedi_outlineregular";
+    font-size: 30px;
+}
+h4 {
+    margin: .2em;
+    padding: 0;
+    font-family: "starwars";
+}
+#spaceField{
+  height: 80vh;
+  width: 80vw;
+  margin: auto;
+  background: gray;
+  display: flex;
+}
+
+#luke{
+  height: 5vh;
+  width: 5vw;
+  background: red;
+  align-self: center;
+  position: relative; 
+}
+
+#goal{
+  height: 10vh;
+  width: 10vw;
+  background: green;
+  display:flex;
+  align-self: center;
+  justify-content: flex-end;
+  margin-left: 82%;
+
+
+
+}
