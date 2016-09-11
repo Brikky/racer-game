@@ -38,7 +38,7 @@ button {
     background: gray;
     display: flex;
 }
-#sound-toggle{
-  position: relative;
-  right: -400px;
+#sound-toggle {
+    position: relative;
+    right: -400px;
 }

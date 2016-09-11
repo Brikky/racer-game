@@ -230,8 +230,8 @@ window.onload = function() {
 
     }
 
-    function toggleSound(){
-      soundOn = !soundOn;
+    function toggleSound() {
+        soundOn = !soundOn;
     }
 
     function moveBullets() {
