@@ -1,8 +1,8 @@
 // //TODO
-// graphics
 // sound optional
 // add touch or graphic buttons for mobile and tablet users
 //second player -> use a button to add
+//upupdowndownleftrightAB
 //
 // *************************************************
 // Sections:
@@ -104,7 +104,6 @@ window.onload = function() {
         width: 15,
         x: 10,
         y: 10
-        //color: "#000000"
     }
 
     //Variables
@@ -137,6 +136,8 @@ window.onload = function() {
     shipImage.src = "images/ship.png";
     var shooters = [shooter1, shooter2, shooter3];
     var speed = 100; // px per second
+    var soundButton = document.getElementById("sound-toggle");
+    var soundOn = true;
     var themeSong = new Audio("sounds/theme.mp3");
     var tieFighterImage = new Image();
     tieFighterImage.src = "images/tie-fighter.png";
@@ -149,6 +150,7 @@ window.onload = function() {
     //Event Listeners
     canvas.addEventListener("click", lockGameScreen);
     playAgain.addEventListener("click", window.location.reload.bind(window.location));
+    soundButton.addEventListener("click", toggleSound);
 
     document.addEventListener("keydown", function(e) {
         if (activeKey == e.keyCode) return;
@@ -204,6 +206,12 @@ window.onload = function() {
         }
     }
 
+    function drawImages(imageObjectsArray) {
+        for (var i = 0; i < imageObjectsArray.length; i++) {
+            context.drawImage(imageObjectsArray[i].name, imageObjectsArray[i].x, imageObjectsArray[i].y, imageObjectsArray[i].width, imageObjectsArray[i].height);
+        }
+    }
+
     //Game Logic Functions
     function isLegalXMovement() {
         var notLeft = racer.x >= 0 || dx > 0;
@@ -222,8 +230,14 @@ window.onload = function() {
 
     }
 
+    function toggleSound(){
+      soundOn = !soundOn;
+    }
+
     function moveBullets() {
-        bulletSound.play();
+        if (soundOn) {
+            bulletSound.play();
+        }
         for (var i = 0; i < bullets.length; i++) {
             if (bullets[i].y == 0) {
                 bullets[i].y = 140;
@@ -309,13 +323,14 @@ window.onload = function() {
         if (isLegalYMovement()) {
             racer.y += dy / 60 * speed;
         }
+
         moveBullets();
         renderObjects(gamePieces);
         context.drawImage(shipImage, racer.x, racer.y, 17, 12);
-        context.drawImage(tieFighterImage, 75, 145 , 10 ,5);
-        context.drawImage(tieFighterImage, 150, 145, 10,5);
-        context.drawImage(tieFighterImage, 225, 145, 10,5);
-        context.drawImage(deathStarImage, 280, 65, 25,25);
+        context.drawImage(tieFighterImage, 75, 145, 10, 5);
+        context.drawImage(tieFighterImage, 150, 145, 10, 5);
+        context.drawImage(tieFighterImage, 225, 145, 10, 5);
+        context.drawImage(deathStarImage, 275, 65, 25, 25);
 
         if (checkCollision(racer, hostileGamePieces)) {
             handleCollision();
