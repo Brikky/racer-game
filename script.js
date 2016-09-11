@@ -136,6 +136,8 @@ window.onload = function() {
     var playerOneDead = false;
     var playerTwoActive = false;
     var playerTwoButton = document.getElementById("player-toggle");
+    var playerTwoControls = document.createElement("H4");
+    playerTwoControls.textContent = "Player 2 Use WASD as arrow keys.";
     var playerTwoDead = false;
     var scrollKeys = {
         37: 1, //left
@@ -255,8 +257,10 @@ window.onload = function() {
         playerTwoActive = !playerTwoActive;
         if (playerTwoActive) {
             gamePieces.push(racer2);
+            instructions.appendChild(playerTwoControls);
         } else if (gamePieces[gamePieces.length - 1] == racer2) {
             gamePieces.pop();
+            playerTwoControls.remove();
         }
     }
 

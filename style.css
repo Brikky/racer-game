@@ -41,8 +41,6 @@ button, #buttons {
     display: flex;
 }
 #sound-toggle, #player-toggle {
-    position: relative;
-    display: inline;
-    right: -400px;
+    display: inline-block;
     margin: 5px;
 }
