@@ -9,7 +9,7 @@
 // -Objects
 // -Variables
 // -Event Listeners
-// -Rendering Functions (Canvas Graphics)
+// -Rendering Functions (Canvas Graphics/Layout)
 // -Game Logic Functions
 // -Scrolling Functions
 // -Run Game
@@ -65,8 +65,8 @@ window.onload = function() {
         color: "#39ff14"
     }
     var goal = {
-        height: 15,
-        width: 20,
+        height: 25,
+        width: 25,
         x: 280,
         y: 65,
         color: "#adff00"
@@ -83,28 +83,28 @@ window.onload = function() {
         width: 10,
         x: 75,
         y: 145,
-        color: "#FFA500"
+        color: "#000000"
     }
     var shooter2 = {
         height: 5,
         width: 10,
         x: 150,
         y: 145,
-        color: "#FFA500"
+        color: "#000000"
     }
     var shooter3 = {
         height: 5,
         width: 10,
         x: 225,
         y: 145,
-        color: "#FFA500"
+        color: "#000000"
     }
     var racer = {
         height: 10,
         width: 15,
         x: 10,
-        y: 10,
-        color: "#FF0000"
+        y: 10
+        //color: "#000000"
     }
 
     //Variables
@@ -115,7 +115,9 @@ window.onload = function() {
     bulletSound.loop = false;
     var canvas = document.getElementById("spaceField");
     var container = document.getElementById("container");
-    var ctx = canvas.getContext("2d");
+    var context = canvas.getContext("2d");
+    var deathStarImage = new Image();
+    deathStarImage.src = "images/death-star.png";
     var dx = 0;
     var dy = 0;
     var explosion = document.createElement("VIDEO");
@@ -125,27 +127,28 @@ window.onload = function() {
     var instructions = document.getElementById("instructions");
     var playAgain = document.createElement("BUTTON");
     playAgain.textContent = "Play Again";
-    playAgain.addEventListener("click", window.location.reload.bind(window.location));
     var scrollKeys = {
         37: 1, //left
         38: 1, //up
         39: 1, //right
         40: 1 //down
     };
+    var shipImage = new Image();
+    shipImage.src = "images/ship.png";
     var shooters = [shooter1, shooter2, shooter3];
     var speed = 100; // px per second
     var themeSong = new Audio("sounds/theme.mp3");
+    var tieFighterImage = new Image();
+    tieFighterImage.src = "images/tie-fighter.png";
     themeSong.loop = false;
     var vaderBreathing = new Audio("sounds/vaderbreathing.mp3");
     vaderBreathing.loop = true;
     var vaderImage = document.createElement("IMG");
     vaderImage.setAttribute("src", "/images/vader.jpg");
 
-
-
-
     //Event Listeners
     canvas.addEventListener("click", lockGameScreen);
+    playAgain.addEventListener("click", window.location.reload.bind(window.location));
 
     document.addEventListener("keydown", function(e) {
         if (activeKey == e.keyCode) return;
@@ -186,13 +189,13 @@ window.onload = function() {
     }
 
     function renderCanvas() {
-        ctx.fillStyle = myCanvas.color;
-        ctx.fillRect(myCanvas.xStart, myCanvas.yStart, myCanvas.width, myCanvas.height);
+        context.fillStyle = myCanvas.color;
+        context.fillRect(myCanvas.xStart, myCanvas.yStart, myCanvas.width, myCanvas.height);
     }
 
     function renderObject(object) {
-        ctx.fillStyle = object.color;
-        ctx.fillRect(object.x, object.y, object.width, object.height);
+        context.fillStyle = object.color;
+        context.fillRect(object.x, object.y, object.width, object.height);
     }
 
     function renderObjects(objectArray) {
@@ -308,6 +311,11 @@ window.onload = function() {
         }
         moveBullets();
         renderObjects(gamePieces);
+        context.drawImage(shipImage, racer.x, racer.y, 17, 12);
+        context.drawImage(tieFighterImage, 75, 145 , 10 ,5);
+        context.drawImage(tieFighterImage, 150, 145, 10,5);
+        context.drawImage(tieFighterImage, 225, 145, 10,5);
+        context.drawImage(deathStarImage, 280, 65, 25,25);
 
         if (checkCollision(racer, hostileGamePieces)) {
             handleCollision();

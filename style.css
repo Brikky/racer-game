@@ -20,42 +20,57 @@ h4 {
     padding: 0;
     font-family: "starwars";
 }
-img{
-  display: block;
-  margin: 0 auto;
+img {
+    display: block;
+    margin: 0 auto;
 }
-button{
-  display:block;
-  margin: 0 auto;
-  padding: 2px;
-  font-size: 14px;
-  font-family: "starwars";
+button {
+    display: block;
+    margin: 0 auto;
+    padding: 2px;
+    font-size: 14px;
+    font-family: "starwars";
 }
-#spaceField{
-  height: 80vh;
-  width: 80vw;
-  margin: auto;
-  background: gray;
-  display: flex;
+.Up {
+    display:block;
+    position: relative;
 }
-
-#luke{
-  height: 5vh;
-  width: 5vw;
-  background: red;
-  align-self: center;
-  position: relative;
+.Right {
+    display:inline-block;
+    position: relative;
+    top: 45px;
 }
-
-#goal{
-  height: 10vh;
-  width: 10vw;
-  background: green;
-  display:flex;
-  align-self: center;
-  justify-content: flex-end;
-  margin-left: 82%;
-
-
-
+.Down {
+    display:block;
+    position: relative;
+    bottom: 0;
+}
+.Left {
+    display:inline-block;
+    position: relative;
+    top: 45px;
+}
+#spaceField {
+    height: 80vh;
+    width: 80vw;
+    margin: auto;
+    background: gray;
+    display: flex;
+}
+#mobile-mode {
+    width: 100px;
+    font-family: "starwars";
+    border: solid gray 1px;
+    background: lightgray;
+    margin: 5px auto;
+}
+#button-container {
+    height: 20vmin;
+    width: 20vmin;
+    font-size: 15pt;
+    margin-left: 1px;
+    position: relative;
+    top: 250px;
+    float: right;
+    display: flex;
 }
