@@ -1,7 +1,5 @@
 // //TODO
-// sound optional
 // add touch or graphic buttons for mobile and tablet users
-//second player -> use a button to add
 //upupdowndownleftrightAB
 //
 // *************************************************
@@ -127,8 +125,6 @@ window.onload = function() {
     var context = canvas.getContext("2d");
     var deathStarImage = new Image();
     deathStarImage.src = "images/death-star.png";
-    // var dx = 0;
-    // var dy = 0;
     var explosion = document.createElement("VIDEO");
     explosion.src = "video/death star explosion.mp4";
     var gamePieces = [racer, goal, shooter1, shooter2, shooter3, bullet11, bullet12, bullet13, bullet21, bullet22, bullet23];
@@ -396,7 +392,7 @@ window.onload = function() {
                 handleCollision();
             }
             if (checkCollision(racer, hostileGamePieces)) {
-                header.textContent = "Player one destroyed!";
+                instructions.innerHTML = "<h4>Player one destroyed!</h4>";
                 playerOneDead = true;
                 racer.x = 400; //places player offscreen to the right
                 racer.y = -100; // places player offscreen above screen
@@ -404,22 +400,20 @@ window.onload = function() {
             }
 
             if (checkCollision(racer2, hostileGamePieces)) {
-                header.textContent = "Player two destroyed!";
+                instructions.innerHTML = "<h4>Player two destroyed!</h4>";
                 playerTwoDead = true;
                 racer2.x = 2000; //places player offscreen to the right
                 racer2.y = -100; //playes player offscreen above screen
 
             }
 
-            if (playerOneDead && playerTwoDead){
-              handleCollision();
+            if (playerOneDead && playerTwoDead) {
+                handleCollision();
             }
         }
 
         moveBullets();
         renderObjects(gamePieces);
-
-
 
         context.drawImage(shipImage, racer.x, racer.y, 17, 12);
         context.drawImage(tieFighterImage, 75, 145, 10, 5);
@@ -430,9 +424,6 @@ window.onload = function() {
         if (!playerTwoActive && checkCollision(racer, hostileGamePieces)) {
             handleCollision();
         }
-
-
-
 
         if (checkWin()) {
             handleWin();
