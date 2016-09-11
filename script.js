@@ -165,7 +165,7 @@ window.onload = function() {
     var vaderBreathing = new Audio("sounds/vaderbreathing.mp3");
     vaderBreathing.loop = true;
     var vaderImage = document.createElement("IMG");
-    vaderImage.setAttribute("src", "/images/vader.jpg");
+    vaderImage.src = "images/vader.jpg");
 
     //Event Listeners
     canvas.addEventListener("click", lockGameScreen);
