@@ -10,15 +10,17 @@
 }
 * {
     text-align: center;
+    font-size: 0;
 }
 h1 {
     font-family: "star_jedi_outlineregular";
-    font-size: 30px;
+    font-size: 40px;
 }
 h4 {
     margin: .2em;
     padding: 0;
     font-family: "starwars";
+    font-size: 15px;
 }
 img {
     display: block;
@@ -34,11 +36,13 @@ button {
 #spaceField {
     height: 80vh;
     width: 80vw;
-    margin: auto;
+    margin: 5px auto;
     background: gray;
     display: flex;
 }
-#sound-toggle {
+#sound-toggle, #player-toggle {
     position: relative;
+    display: inline;
     right: -400px;
+    margin: 5px;
 }

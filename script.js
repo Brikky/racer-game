@@ -15,7 +15,6 @@
 // -Run Game
 // *************************************************
 
-
 window.onload = function() {
     //**TESTGROUND**
 
@@ -69,7 +68,7 @@ window.onload = function() {
         width: 25,
         x: 280,
         y: 65,
-        color: "#adff00"
+        color: "rgba(0,0,0,0)"
     }
     var myCanvas = {
         xStart: 0,
@@ -83,32 +82,43 @@ window.onload = function() {
         width: 10,
         x: 75,
         y: 145,
-        color: "#000000"
+        color: "rgba(0,0,0,0)"
     }
     var shooter2 = {
         height: 5,
         width: 10,
         x: 150,
         y: 145,
-        color: "#000000"
+        color: "rgba(0,0,0,0)"
     }
     var shooter3 = {
         height: 5,
         width: 10,
         x: 225,
         y: 145,
-        color: "#000000"
+        color: "rgba(0,0,0,0)"
     }
     var racer = {
         height: 10,
         width: 15,
         x: 10,
-        y: 10
+        y: 40,
+        color: "rgba(0,0,0,0)",
+        dx: 0,
+        dy: 0
+    }
+    var racer2 = {
+        height: 10,
+        width: 15,
+        x: 10,
+        y: 100,
+        color: "rgba(0,0,0,0)",
+        dx: 0,
+        dy: 0
     }
 
     //Variables
     var activeKey = 0;
-    var hostileGamePieces = [shooter1, shooter2, shooter3, bullet11, bullet12, bullet13, bullet21, bullet22, bullet23];
     var bullets = [bullet11, bullet12, bullet13, bullet21, bullet22, bullet23];
     var bulletSound = new Audio("sounds/blaster-firing.mp3");
     bulletSound.loop = false;
@@ -117,23 +127,35 @@ window.onload = function() {
     var context = canvas.getContext("2d");
     var deathStarImage = new Image();
     deathStarImage.src = "images/death-star.png";
-    var dx = 0;
-    var dy = 0;
+    // var dx = 0;
+    // var dy = 0;
     var explosion = document.createElement("VIDEO");
     explosion.src = "video/death star explosion.mp4";
     var gamePieces = [racer, goal, shooter1, shooter2, shooter3, bullet11, bullet12, bullet13, bullet21, bullet22, bullet23];
     var header = document.getElementById("page-header");
+    var hostileGamePieces = [shooter1, shooter2, shooter3, bullet11, bullet12, bullet13, bullet21, bullet22, bullet23];
     var instructions = document.getElementById("instructions");
     var playAgain = document.createElement("BUTTON");
     playAgain.textContent = "Play Again";
+    var playerOneDead = false;
+    var playerTwoActive = false;
+    var playerTwoButton = document.getElementById("player-toggle");
+    var playerTwoDead = false;
     var scrollKeys = {
         37: 1, //left
         38: 1, //up
         39: 1, //right
-        40: 1 //down
+        40: 1, //down
+        65: 1, //A -> Player 2 left
+        87: 1, //W -> Player 2 up
+        68: 1, //D -> Player 2 right
+        83: 1 // S -> Player 2 down
+
     };
     var shipImage = new Image();
     shipImage.src = "images/ship.png";
+    var shipImage2 = new Image();
+    shipImage2.src = "images/ship2.png";
     var shooters = [shooter1, shooter2, shooter3];
     var speed = 100; // px per second
     var soundButton = document.getElementById("sound-toggle");
@@ -151,35 +173,56 @@ window.onload = function() {
     canvas.addEventListener("click", lockGameScreen);
     playAgain.addEventListener("click", window.location.reload.bind(window.location));
     soundButton.addEventListener("click", toggleSound);
+    playerTwoButton.addEventListener("click", addPlayerTwo);
 
     document.addEventListener("keydown", function(e) {
         if (activeKey == e.keyCode) return;
         activeKey = e.keyCode;
         switch (e.keyCode) {
             case 37:
-                dx = -1;
+                racer.dx += -1;
                 break;
             case 38:
-                dy = -1;
+                racer.dy += -1;
                 break;
             case 39:
-                dx = 1;
+                racer.dx += 1;
                 break;
             case 40:
-                dy = 1;
+                racer.dy += 1;
+                break;
+            case 65:
+                racer2.dx += -1;
+                break;
+            case 87:
+                racer2.dy += -1;
+                break;
+            case 68:
+                racer2.dx += 1;
+                break;
+            case 83:
+                racer2.dy += 1;
                 break;
         }
     });
 
     document.addEventListener("keyup", function(e) {
         switch (e.keyCode) {
-            case 37: // left
-            case 39: // right
-                dx = 0;
+            case 37: //left
+            case 39: //right
+                racer.dx = 0;
                 break;
-            case 38: // up
-            case 40: // down
-                dy = 0;
+            case 38: //up
+            case 40: //down
+                racer.dy = 0;
+                break;
+            case 65: //left
+            case 68: //right
+                racer2.dx = 0;
+                break;
+            case 87: //up
+            case 83: //down
+                racer2.dy = 0;
                 break;
         }
         activeKey = 0;
@@ -212,22 +255,37 @@ window.onload = function() {
         }
     }
 
+    function addPlayerTwo() {
+        playerTwoActive = !playerTwoActive;
+        if (playerTwoActive) {
+            gamePieces.push(racer2);
+        } else if (gamePieces[gamePieces.length - 1] == racer2) {
+            gamePieces.pop();
+        }
+    }
+
+    function drawPlayerTwo() {
+        context.drawImage(shipImage2, racer2.x, racer2.y, 17, 12);
+    }
+
     //Game Logic Functions
-    function isLegalXMovement() {
-        var notLeft = racer.x >= 0 || dx > 0;
-        var notRight = racer.x <= canvas.width - racer.width || dx < 0;
+    function isLegalXMovement(racerObject) {
+        var notLeft = racerObject.x >= 0 || racerObject.dx > 0;
+        var notRight = racerObject.x <= canvas.width - racerObject.width || racerObject.dx < 0;
         return notLeft && notRight;
     }
 
-    function isLegalYMovement() {
-        var notAbove = racer.y >= 0 || dy > 0;
-        var notBelow = racer.y <= canvas.height - racer.height || dy < 0;
+    function isLegalYMovement(racerObject) {
+        var notAbove = racerObject.y >= 0 || racerObject.dy > 0;
+        var notBelow = racerObject.y <= canvas.height - racerObject.height || racerObject.dy < 0;
         return notBelow && notAbove;
     }
 
     function isOverlapping(object1, object2) {
-        return !(object1.x + object1.width < object2.x || object2.x + object2.width < object1.x || object1.y + object1.height < object2.y || object2.y + object2.height < object1.y);
-
+        return !(object1.x + object1.width < object2.x ||
+            object2.x + object2.width < object1.x ||
+            object1.y + object1.height < object2.y ||
+            object2.y + object2.height < object1.y);
     }
 
     function toggleSound() {
@@ -265,7 +323,7 @@ window.onload = function() {
     }
 
     function checkWin() {
-        return isOverlapping(racer, goal)
+        return isOverlapping(racer, goal) || isOverlapping(racer2, goal);
     }
 
     function handleWin() {
@@ -280,11 +338,11 @@ window.onload = function() {
     }
 
     //Scrolling functions
-    function preventDefault(e) {
-        e = e || window.event;
-        if (e.preventDefault)
-            e.preventDefault();
-        e.returnValue = false;
+    function preventDefault(event) {
+        event = event || window.event;
+        if (event.preventDefault)
+            event.preventDefault();
+        event.returnValue = false;
     }
 
     function preventDefaultForScrollKeys(e) {
@@ -317,24 +375,64 @@ window.onload = function() {
         renderCanvas();
 
         //move racer
-        if (isLegalXMovement()) {
-            racer.x += dx / 60 * speed;
+        if (isLegalXMovement(racer)) {
+            racer.x += racer.dx / 60 * speed;
         }
-        if (isLegalYMovement()) {
-            racer.y += dy / 60 * speed;
+        if (isLegalYMovement(racer)) {
+            racer.y += racer.dy / 60 * speed;
+        }
+
+        if (playerTwoActive) {
+            drawPlayerTwo();
+
+            //move racer2
+            if (isLegalXMovement(racer2)) {
+                racer2.x += racer2.dx / 60 * speed;
+            }
+            if (isLegalYMovement(racer2)) {
+                racer2.y += racer2.dy / 60 * speed;
+            }
+            if (isOverlapping(racer, racer2)) {
+                handleCollision();
+            }
+            if (checkCollision(racer, hostileGamePieces)) {
+                header.textContent = "Player one destroyed!";
+                playerOneDead = true;
+                racer.x = 400; //places player offscreen to the right
+                racer.y = -100; // places player offscreen above screen
+
+            }
+
+            if (checkCollision(racer2, hostileGamePieces)) {
+                header.textContent = "Player two destroyed!";
+                playerTwoDead = true;
+                racer2.x = 2000; //places player offscreen to the right
+                racer2.y = -100; //playes player offscreen above screen
+
+            }
+
+            if (playerOneDead && playerTwoDead){
+              handleCollision();
+            }
         }
 
         moveBullets();
         renderObjects(gamePieces);
+
+
+
         context.drawImage(shipImage, racer.x, racer.y, 17, 12);
         context.drawImage(tieFighterImage, 75, 145, 10, 5);
         context.drawImage(tieFighterImage, 150, 145, 10, 5);
         context.drawImage(tieFighterImage, 225, 145, 10, 5);
         context.drawImage(deathStarImage, 275, 65, 25, 25);
 
-        if (checkCollision(racer, hostileGamePieces)) {
+        if (!playerTwoActive && checkCollision(racer, hostileGamePieces)) {
             handleCollision();
         }
+
+
+
 
         if (checkWin()) {
             handleWin();
@@ -344,6 +442,5 @@ window.onload = function() {
     }
 
     requestAnimationFrame(race);
-
 
 }

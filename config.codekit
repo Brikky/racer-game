@@ -24,6 +24,17 @@
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
+	"\/images\/ship2.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 30905,
+		"inputAbbreviatedPath": "\/images\/ship2.png",
+		"outputAbbreviatedPath": "\/images\/ship2.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
 	"\/images\/tie-fighter.png": {
 		"fileType": 32768,
 		"ignore": 0,
