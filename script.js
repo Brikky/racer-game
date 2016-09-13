@@ -304,7 +304,7 @@ window.onload = function() {
             if (racer.x >= 75 && racer.x < 150) {
                 bullets[i].y -= 2;
             } else if (racer.x >= 150) {
-                bullets[i].y -= 5;
+                bullets[i].y -= 2.7;
             } else {
                 bullets[i].y -= 1;
             }
