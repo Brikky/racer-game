@@ -1,5 +1,4 @@
-// //TODO
-//update tie fighter targeting for 2 players
+// //Further Work
 // add touch or graphic buttons for mobile and tablet users
 //upupdowndownleftrightAB
 //
@@ -26,77 +25,77 @@ window.onload = function() {
         x: 75,
         y: 145,
         color: "rgba(0,0,0,0)"
-    }
+    };
     var shooter2 = {
         height: 5,
         width: 10,
         x: 150,
         y: 145,
         color: "rgba(0,0,0,0)"
-    }
+    };
     var shooter3 = {
         height: 5,
         width: 10,
         x: 225,
         y: 145,
         color: "rgba(0,0,0,0)"
-    }
+    };
     var bullet11 = {
         height: 5,
         width: 2,
         x: shooter1.x + shooter1.width / 2 - 1,
         y: 100,
         color: "#39ff14"
-    }
+    };
     var bullet12 = {
         height: 5,
         width: 2,
         x: shooter2.x + shooter2.width / 2 - 1,
         y: 140,
         color: "#39ff14"
-    }
+    };
     var bullet13 = {
         height: 5,
         width: 2,
         x: shooter3.x + shooter3.width / 2 - 1,
         y: 100,
         color: "#39ff14"
-    }
+    };
     var bullet21 = {
         height: 5,
         width: 2,
         x: shooter1.x + shooter1.width / 2 - 1,
         y: 30,
         color: "#39ff14"
-    }
+    };
     var bullet22 = {
         height: 5,
         width: 2,
         x: shooter2.x + shooter2.width / 2 - 1,
         y: 60,
         color: "#39ff14"
-    }
+    };
     var bullet23 = {
         height: 5,
         width: 2,
         x: shooter3.x + shooter3.width / 2 - 1,
         y: 30,
         color: "#39ff14"
-    }
+    };
     var goal = {
         height: 25,
         width: 25,
         x: 280,
         y: 65,
         color: "rgba(0,0,0,0)"
-    }
+    };
     var myCanvas = {
         xStart: 0,
         yStart: 0,
         height: 150,
         width: 300,
         color: "#000000"
-    }
+    };
     var racer = {
         height: 10,
         width: 15,
@@ -105,7 +104,7 @@ window.onload = function() {
         color: "rgba(0,0,0,0)",
         dx: 0,
         dy: 0
-    }
+    };
     var racer2 = {
         height: 10,
         width: 15,
@@ -114,7 +113,7 @@ window.onload = function() {
         color: "rgba(0,0,0,0)",
         dx: 0,
         dy: 0
-    }
+    };
 
     //Variables
     var activeKey = 0;
@@ -149,7 +148,6 @@ window.onload = function() {
         87: 1, //W -> Player 2 up
         68: 1, //D -> Player 2 right
         83: 1 // S -> Player 2 down
-
     };
     var shipImage = new Image();
     shipImage.src = "images/ship.png";
@@ -329,17 +327,17 @@ window.onload = function() {
     function moveShooters() {
         //TIE fighters should preferentialy target player1
         if (racer.x < 75) {
-            racer.x - shooter1.x <= 0 ? shooter1.x -= .2 : shooter1.x += .2;
+            racer.x - shooter1.x <= 0 ? shooter1.x -= 0.2 : shooter1.x += 0.2;
         } else if (playerTwoActive && racer2.x < 75) {
-            racer2.x - shooter1.x <= 0 ? shooter1.x -= .2 : shooter1.x += .2;
+            racer2.x - shooter1.x <= 0 ? shooter1.x -= 0.2 : shooter1.x += 0.2;
         } else if (racer.x >= 75 && racer.x <= 150) {
-            racer.x - shooter2.x <= -10 ? shooter2.x -= .35 : shooter2.x += .35;
+            racer.x - shooter2.x <= -10 ? shooter2.x -= 0.35 : shooter2.x += 0.35;
         } else if (playerTwoActive && racer2.x >= 75 && racer2.x <= 150) {
-            racer2.x - shooter2.x <= -10 ? shooter2.x -= .35 : shooter2.x += .35;
+            racer2.x - shooter2.x <= -10 ? shooter2.x -= 0.35 : shooter2.x += 0.35;
         } else if (racer.x > 150 && racer.x < 300) {
-            racer.x - shooter3.x <= -20 ? shooter3.x -= .5 : shooter3.x += .5;
+            racer.x - shooter3.x <= -20 ? shooter3.x -= 0.5 : shooter3.x += 0.5;
         } else if (playerTwoActive && racer2.x > 150 && racer2.x < 300) {
-            racer2.x - shooter3.x <= -20 ? shooter3.x -= .5 : shooter3.x += .5;
+            racer2.x - shooter3.x <= -20 ? shooter3.x -= 0.5 : shooter3.x += 0.5;
         }
     }
 
