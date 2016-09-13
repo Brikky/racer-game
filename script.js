@@ -333,13 +333,13 @@ window.onload = function() {
         } else if (playerTwoActive && racer2.x < 75) {
             racer2.x - shooter1.x <= 0 ? shooter1.x -= .2 : shooter1.x += .2;
         } else if (racer.x >= 75 && racer.x <= 150) {
-            racer.x - shooter2.x <= 0 ? shooter2.x -= .35 : shooter2.x += .35;
+            racer.x - shooter2.x <= -10 ? shooter2.x -= .35 : shooter2.x += .35;
         } else if (playerTwoActive && racer2.x >= 75 && racer2.x <= 150) {
-            racer2.x - shooter2.x <= 0 ? shooter2.x -= .35 : shooter2.x += .35;
+            racer2.x - shooter2.x <= -10 ? shooter2.x -= .35 : shooter2.x += .35;
         } else if (racer.x > 150 && racer.x < 300) {
-            racer.x - shooter3.x <= 0 ? shooter3.x -= .5 : shooter3.x += .5;
+            racer.x - shooter3.x <= -20 ? shooter3.x -= .5 : shooter3.x += .5;
         } else if (playerTwoActive && racer2.x > 150 && racer2.x < 300) {
-            racer2.x - shooter3.x <= 0 ? shooter3.x -= .5 : shooter3.x += .5;
+            racer2.x - shooter3.x <= -20 ? shooter3.x -= .5 : shooter3.x += .5;
         }
     }
 
