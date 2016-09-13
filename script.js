@@ -19,62 +19,6 @@ window.onload = function() {
     //**************
 
     //Objects
-    var bullet11 = {
-        height: 5,
-        width: 2,
-        x: 79,
-        y: 100,
-        color: "#39ff14"
-    }
-    var bullet12 = {
-        height: 5,
-        width: 2,
-        x: 154,
-        y: 140,
-        color: "#39ff14"
-    }
-    var bullet13 = {
-        height: 5,
-        width: 2,
-        x: 229,
-        y: 100,
-        color: "#39ff14"
-    }
-    var bullet21 = {
-        height: 5,
-        width: 2,
-        x: 79,
-        y: 30,
-        color: "#39ff14"
-    }
-    var bullet22 = {
-        height: 5,
-        width: 2,
-        x: 154,
-        y: 60,
-        color: "#39ff14"
-    }
-    var bullet23 = {
-        height: 5,
-        width: 2,
-        x: 229,
-        y: 30,
-        color: "#39ff14"
-    }
-    var goal = {
-        height: 25,
-        width: 25,
-        x: 280,
-        y: 65,
-        color: "rgba(0,0,0,0)"
-    }
-    var myCanvas = {
-        xStart: 0,
-        yStart: 0,
-        height: 150,
-        width: 300,
-        color: "#000000"
-    }
     var shooter1 = {
         height: 5,
         width: 10,
@@ -95,6 +39,62 @@ window.onload = function() {
         x: 225,
         y: 145,
         color: "rgba(0,0,0,0)"
+    }
+    var bullet11 = {
+        height: 5,
+        width: 2,
+        x: shooter1.x + shooter1.width / 2 - 1,
+        y: 100,
+        color: "#39ff14"
+    }
+    var bullet12 = {
+        height: 5,
+        width: 2,
+        x: shooter2.x + shooter2.width / 2 - 1,
+        y: 140,
+        color: "#39ff14"
+    }
+    var bullet13 = {
+        height: 5,
+        width: 2,
+        x: shooter3.x + shooter3.width / 2 - 1,
+        y: 100,
+        color: "#39ff14"
+    }
+    var bullet21 = {
+        height: 5,
+        width: 2,
+        x: shooter1.x + shooter1.width / 2 - 1,
+        y: 30,
+        color: "#39ff14"
+    }
+    var bullet22 = {
+        height: 5,
+        width: 2,
+        x: shooter2.x + shooter2.width / 2 - 1,
+        y: 60,
+        color: "#39ff14"
+    }
+    var bullet23 = {
+        height: 5,
+        width: 2,
+        x: shooter3.x + shooter3.width / 2 - 1,
+        y: 30,
+        color: "#39ff14"
+    }
+    var goal = {
+        height: 25,
+        width: 25,
+        x: 280,
+        y: 65,
+        color: "rgba(0,0,0,0)"
+    }
+    var myCanvas = {
+        xStart: 0,
+        yStart: 0,
+        height: 150,
+        width: 300,
+        color: "#000000"
     }
     var racer = {
         height: 10,
@@ -299,15 +299,41 @@ window.onload = function() {
         for (var i = 0; i < bullets.length; i++) {
             if (bullets[i].y <= 0) {
                 bullets[i].y = 140;
+                switch (i) {
+                    case 0:
+                    case 3:
+                        bullets[i].x = shooter1.x + shooter1.width / 2 - 1;
+                        break;
+                    case 1:
+                    case 4:
+                        bullets[i].x = shooter2.x + shooter2.width / 2 - 1;
+                        break;
+                    case 2:
+                    case 5:
+                        bullets[i].x = shooter3.x + shooter3.width / 2 - 1;
+                        break;
+                }
             }
 
-            if (racer.x >= 75 && racer.x < 150) {
+            if (racer.x >= 75 || racer2.x >= 75 && racer.x < 150 && racer2.x < 150) {
                 bullets[i].y -= 2;
-            } else if (racer.x >= 150) {
-                bullets[i].y -= 2.7;
+            } else if (racer.x >= 150 || racer2.x >= 150) {
+                bullets[i].y -= 3.5;
             } else {
                 bullets[i].y -= 1;
             }
+        }
+    }
+
+    function moveShooters() {
+        console.log(bullet11.x);
+        if (racer.x < 75) {
+            racer.x - shooter1.x <= 0 ? shooter1.x -= .2 : shooter1.x += .2;
+        } else if (racer.x >= 75 && racer.x <= 150) {
+          racer.x - shooter2.x <= 0 ? shooter2.x -= .35 : shooter2.x += .35;
+        } else {
+          racer.x - shooter3.x <= 0 ? shooter3.x -= .5 : shooter3.x += .5;
+
         }
     }
 
@@ -424,12 +450,13 @@ window.onload = function() {
         }
 
         moveBullets();
+        moveShooters();
         renderObjects(gamePieces);
 
         context.drawImage(shipImage, racer.x, racer.y, 17, 12);
-        context.drawImage(tieFighterImage, 75, 145, 10, 5);
-        context.drawImage(tieFighterImage, 150, 145, 10, 5);
-        context.drawImage(tieFighterImage, 225, 145, 10, 5);
+        context.drawImage(tieFighterImage, shooter1.x, 145, 10, 5);
+        context.drawImage(tieFighterImage, shooter2.x, 145, 10, 5);
+        context.drawImage(tieFighterImage, shooter3.x, 145, 10, 5);
         context.drawImage(deathStarImage, 275, 65, 25, 25);
 
         if (!playerTwoActive && checkCollision(racer, hostileGamePieces)) {
