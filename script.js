@@ -297,10 +297,17 @@ window.onload = function() {
             bulletSound.play();
         }
         for (var i = 0; i < bullets.length; i++) {
-            if (bullets[i].y == 0) {
+            if (bullets[i].y <= 0) {
                 bullets[i].y = 140;
             }
-            bullets[i].y -= 1;
+
+            if (racer.x >= 75 && racer.x < 150) {
+                bullets[i].y -= 2;
+            } else if (racer.x >= 150) {
+                bullets[i].y -= 5;
+            } else {
+                bullets[i].y -= 1;
+            }
         }
     }
 
