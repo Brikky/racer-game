@@ -1,4 +1,5 @@
 // //Further Work
+//wait for user to confirm ready
 // add touch or graphic buttons for mobile and tablet users
 //upupdowndownleftrightAB
 //
@@ -157,6 +158,7 @@ window.onload = function() {
     var speed = 100; // px per second
     var soundButton = document.getElementById("sound-toggle");
     var soundOn = true;
+    var startButton = document.getElementById("start");
     var themeSong = new Audio("sounds/theme.mp3");
     var tieFighterImage = new Image();
     tieFighterImage.src = "images/tie-fighter.png";
@@ -171,6 +173,7 @@ window.onload = function() {
     playAgain.addEventListener("click", window.location.reload.bind(window.location));
     soundButton.addEventListener("click", toggleSound);
     playerTwoButton.addEventListener("click", addPlayerTwo);
+    startButton.addEventListener("click", startGame)
 
     document.addEventListener("keydown", function(e) {
         if (activeKey == e.keyCode) return;
@@ -226,6 +229,11 @@ window.onload = function() {
     });
 
     //Rendering Functions
+    function startGame() {
+        requestAnimationFrame(race);
+        startButton.remove();
+    }
+
     function remove(id) {
         return (elem = document.getElementById(id)).parentNode.removeChild(elem);
     }
@@ -474,6 +482,6 @@ window.onload = function() {
         requestAnimationFrame(race);
     }
 
-    requestAnimationFrame(race);
+    // requestAnimationFrame(race);
 
 }
