@@ -249,15 +249,15 @@ window.onload = function() {
     }
 
     function renderObjects(objectArray) {
-        for (var i = 0; i < objectArray.length; i++) {
-            renderObject(objectArray[i]);
-        }
+        objectArray.forEach(function(object){
+            renderObject(object);
+        });
     }
 
     function drawImages(imageObjectsArray) {
-        for (var i = 0; i < imageObjectsArray.length; i++) {
-            context.drawImage(imageObjectsArray[i].name, imageObjectsArray[i].x, imageObjectsArray[i].y, imageObjectsArray[i].width, imageObjectsArray[i].height);
-        }
+        imageObjectsArray.forEach(function(imageObject){
+            context.drawImage(imageObject.name, imageObject.x, imageObject.y, imageObject.width, imageObject.height);
+        });
     }
 
     function addPlayerTwo() {
@@ -303,34 +303,34 @@ window.onload = function() {
         if (soundOn) {
             bulletSound.play();
         }
-        for (var i = 0; i < bullets.length; i++) {
-            if (bullets[i].y <= 0) {
-                bullets[i].y = 140;
-                switch (i) {
+        bullets.forEach(function(bullet, index){
+            if (bullet.y <= 0) {
+                bullet.y = 140;
+                switch (index) {
                     case 0:
                     case 3:
-                        bullets[i].x = shooter1.x + shooter1.width / 2 - 1;
+                        bullet.x = shooter1.x + shooter1.width / 2 - 1;
                         break;
                     case 1:
                     case 4:
-                        bullets[i].x = shooter2.x + shooter2.width / 2 - 1;
+                        bullet.x = shooter2.x + shooter2.width / 2 - 1;
                         break;
                     case 2:
                     case 5:
-                        bullets[i].x = shooter3.x + shooter3.width / 2 - 1;
+                        bullet.x = shooter3.x + shooter3.width / 2 - 1;
                         break;
                 }
             }
 
             if (racer.x >= 75 || racer2.x >= 75 && racer.x < 150 && racer2.x < 150) {
-                bullets[i].y -= 2;
+                bullet.y -= 2;
             } else if (racer.x >= 150 || racer2.x >= 150) {
-                bullets[i].y -= 3.5;
+                bullet.y -= 3.5;
             } else {
-                bullets[i].y -= 1;
+                bullet.y -= 1;
             }
-        }
-    }
+    })
+  }
 
     function moveShooters() {
         //TIE fighters should preferentialy target player1
@@ -351,10 +351,16 @@ window.onload = function() {
 
     function checkCollision(checkObject, againstArray) {
         for (var i = 0; i < againstArray.length; i++) {
-            if (isOverlapping(checkObject, againstArray[i])) {
-                return true;
-            }
+          if(isOverlapping(checkObject, againstArray[i])){
+            return true;
+          }
         }
+        //  againstArray.forEach(function(againstObject){
+        //    console.log(isOverlapping(checkObject, againstObject));
+        //    if(isOverlapping(checkObject, againstObject)){
+        //      return true; //return doesn't break out of the checkCollision function
+        //    }
+        //  });
     }
 
     function handleCollision() {
