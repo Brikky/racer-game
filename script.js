@@ -1,5 +1,4 @@
 // //Further Work
-//wait for user to confirm ready
 // add touch or graphic buttons for mobile and tablet users
 //upupdowndownleftrightAB
 //
@@ -21,6 +20,7 @@ window.onload = function() {
 
     //Objects
     var shooter1 = {
+      image: tieFighterImage,
         height: 5,
         width: 10,
         x: 75,
@@ -28,6 +28,7 @@ window.onload = function() {
         color: "rgba(0,0,0,0)"
     };
     var shooter2 = {
+      image: tieFighterImage,
         height: 5,
         width: 10,
         x: 150,
@@ -35,6 +36,7 @@ window.onload = function() {
         color: "rgba(0,0,0,0)"
     };
     var shooter3 = {
+      image: tieFighterImage,
         height: 5,
         width: 10,
         x: 225,
@@ -84,6 +86,7 @@ window.onload = function() {
         color: "#39ff14"
     };
     var goal = {
+      image: deathStarImage,
         height: 25,
         width: 25,
         x: 280,
@@ -98,6 +101,7 @@ window.onload = function() {
         color: "#000000"
     };
     var racer = {
+      image: shipImage,
         height: 10,
         width: 15,
         x: 10,
@@ -107,6 +111,7 @@ window.onload = function() {
         dy: 0
     };
     var racer2 = {
+      image: shipImage2,
         height: 10,
         width: 15,
         x: 10,
@@ -131,6 +136,7 @@ window.onload = function() {
     var gamePieces = [racer, goal, shooter1, shooter2, shooter3, bullet11, bullet12, bullet13, bullet21, bullet22, bullet23];
     var header = document.getElementById("page-header");
     var hostileGamePieces = [shooter1, shooter2, shooter3, bullet11, bullet12, bullet13, bullet21, bullet22, bullet23];
+    var imagePieces = [racer, shooter1, shooter2, shooter3, goal];
     var instructions = document.getElementById("instructions");
     var playAgain = document.createElement("BUTTON");
     playAgain.textContent = "Play Again";
@@ -216,12 +222,12 @@ window.onload = function() {
             case 40: //down
                 racer.dy = 0;
                 break;
-            case 65: //left
-            case 68: //right
+            case 65: //p2 left
+            case 68: //p2 right
                 racer2.dx = 0;
                 break;
-            case 87: //up
-            case 83: //down
+            case 87: //p2 up
+            case 83: //p2 down
                 racer2.dy = 0;
                 break;
         }
@@ -229,9 +235,11 @@ window.onload = function() {
     });
 
     //Rendering Functions
+
     function startGame() {
         requestAnimationFrame(race);
         startButton.remove();
+        lockGameScreen();
     }
 
     function remove(id) {
@@ -249,15 +257,16 @@ window.onload = function() {
     }
 
     function renderObjects(objectArray) {
-        for (var i = 0; i < objectArray.length; i++) {
-            renderObject(objectArray[i]);
-        }
+        objectArray.forEach(function(object) {
+            renderObject(object);
+        });
     }
 
-    function drawImages(imageObjectsArray) {
-        for (var i = 0; i < imageObjectsArray.length; i++) {
-            context.drawImage(imageObjectsArray[i].name, imageObjectsArray[i].x, imageObjectsArray[i].y, imageObjectsArray[i].width, imageObjectsArray[i].height);
-        }
+
+    function drawImages(gamePieces) {
+        gamePieces.forEach(function(piece) {
+            context.drawImage(piece.image, piece.x, piece.y, piece.width, piece.height);
+        });
     }
 
     function addPlayerTwo() {
@@ -303,33 +312,33 @@ window.onload = function() {
         if (soundOn) {
             bulletSound.play();
         }
-        for (var i = 0; i < bullets.length; i++) {
-            if (bullets[i].y <= 0) {
-                bullets[i].y = 140;
-                switch (i) {
+        bullets.forEach(function(bullet, index) {
+            if (bullet.y <= 0) {
+                bullet.y = 140;
+                switch (index) {
                     case 0:
                     case 3:
-                        bullets[i].x = shooter1.x + shooter1.width / 2 - 1;
+                        bullet.x = shooter1.x + shooter1.width / 2 - 1;
                         break;
                     case 1:
                     case 4:
-                        bullets[i].x = shooter2.x + shooter2.width / 2 - 1;
+                        bullet.x = shooter2.x + shooter2.width / 2 - 1;
                         break;
                     case 2:
                     case 5:
-                        bullets[i].x = shooter3.x + shooter3.width / 2 - 1;
+                        bullet.x = shooter3.x + shooter3.width / 2 - 1;
                         break;
                 }
             }
 
             if (racer.x >= 75 || racer2.x >= 75 && racer.x < 150 && racer2.x < 150) {
-                bullets[i].y -= 2;
+                bullet.y -= 2;
             } else if (racer.x >= 150 || racer2.x >= 150) {
-                bullets[i].y -= 3.5;
+                bullet.y -= 3.5;
             } else {
-                bullets[i].y -= 1;
+                bullet.y -= 1;
             }
-        }
+        })
     }
 
     function moveShooters() {
@@ -357,7 +366,7 @@ window.onload = function() {
         }
     }
 
-    function handleCollision() {
+    function loseGame() {
         header.textContent = "You've been destroyed!";
         instructions.remove();
         canvas.remove();
@@ -438,7 +447,7 @@ window.onload = function() {
                 racer2.y += racer2.dy / 60 * speed;
             }
             if (isOverlapping(racer, racer2)) {
-                handleCollision();
+                loseGame();
             }
             if (checkCollision(racer, hostileGamePieces)) {
                 instructions.innerHTML = "<h4>Player one destroyed!</h4>";
@@ -457,7 +466,7 @@ window.onload = function() {
             }
 
             if (playerOneDead && playerTwoDead) {
-                handleCollision();
+                loseGame();
             }
         }
 
@@ -472,7 +481,7 @@ window.onload = function() {
         context.drawImage(deathStarImage, 275, 65, 25, 25);
 
         if (!playerTwoActive && checkCollision(racer, hostileGamePieces)) {
-            handleCollision();
+            loseGame();
         }
 
         if (checkWin()) {
@@ -481,7 +490,5 @@ window.onload = function() {
 
         requestAnimationFrame(race);
     }
-
-    // requestAnimationFrame(race);
 
 }
