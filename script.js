@@ -1,5 +1,4 @@
 // //Further Work
-//wait for user to confirm ready
 // add touch or graphic buttons for mobile and tablet users
 //upupdowndownleftrightAB
 //
@@ -21,6 +20,7 @@ window.onload = function() {
 
     //Objects
     var shooter1 = {
+      image: tieFighterImage,
         height: 5,
         width: 10,
         x: 75,
@@ -28,6 +28,7 @@ window.onload = function() {
         color: "rgba(0,0,0,0)"
     };
     var shooter2 = {
+      image: tieFighterImage,
         height: 5,
         width: 10,
         x: 150,
@@ -35,6 +36,7 @@ window.onload = function() {
         color: "rgba(0,0,0,0)"
     };
     var shooter3 = {
+      image: tieFighterImage,
         height: 5,
         width: 10,
         x: 225,
@@ -84,6 +86,7 @@ window.onload = function() {
         color: "#39ff14"
     };
     var goal = {
+      image: deathStarImage,
         height: 25,
         width: 25,
         x: 280,
@@ -98,6 +101,7 @@ window.onload = function() {
         color: "#000000"
     };
     var racer = {
+      image: shipImage,
         height: 10,
         width: 15,
         x: 10,
@@ -107,6 +111,7 @@ window.onload = function() {
         dy: 0
     };
     var racer2 = {
+      image: shipImage2,
         height: 10,
         width: 15,
         x: 10,
@@ -131,6 +136,7 @@ window.onload = function() {
     var gamePieces = [racer, goal, shooter1, shooter2, shooter3, bullet11, bullet12, bullet13, bullet21, bullet22, bullet23];
     var header = document.getElementById("page-header");
     var hostileGamePieces = [shooter1, shooter2, shooter3, bullet11, bullet12, bullet13, bullet21, bullet22, bullet23];
+    var imagePieces = [racer, shooter1, shooter2, shooter3, goal];
     var instructions = document.getElementById("instructions");
     var playAgain = document.createElement("BUTTON");
     playAgain.textContent = "Play Again";
@@ -216,12 +222,12 @@ window.onload = function() {
             case 40: //down
                 racer.dy = 0;
                 break;
-            case 65: //left
-            case 68: //right
+            case 65: //p2 left
+            case 68: //p2 right
                 racer2.dx = 0;
                 break;
-            case 87: //up
-            case 83: //down
+            case 87: //p2 up
+            case 83: //p2 down
                 racer2.dy = 0;
                 break;
         }
@@ -229,9 +235,11 @@ window.onload = function() {
     });
 
     //Rendering Functions
+
     function startGame() {
         requestAnimationFrame(race);
         startButton.remove();
+        lockGameScreen();
     }
 
     function remove(id) {
@@ -249,14 +257,15 @@ window.onload = function() {
     }
 
     function renderObjects(objectArray) {
-        objectArray.forEach(function(object){
+        objectArray.forEach(function(object) {
             renderObject(object);
         });
     }
 
-    function drawImages(imageObjectsArray) {
-        imageObjectsArray.forEach(function(imageObject){
-            context.drawImage(imageObject.name, imageObject.x, imageObject.y, imageObject.width, imageObject.height);
+
+    function drawImages(gamePieces) {
+        gamePieces.forEach(function(piece) {
+            context.drawImage(piece.image, piece.x, piece.y, piece.width, piece.height);
         });
     }
 
@@ -303,7 +312,7 @@ window.onload = function() {
         if (soundOn) {
             bulletSound.play();
         }
-        bullets.forEach(function(bullet, index){
+        bullets.forEach(function(bullet, index) {
             if (bullet.y <= 0) {
                 bullet.y = 140;
                 switch (index) {
@@ -329,8 +338,8 @@ window.onload = function() {
             } else {
                 bullet.y -= 1;
             }
-    })
-  }
+        })
+    }
 
     function moveShooters() {
         //TIE fighters should preferentialy target player1
@@ -351,19 +360,13 @@ window.onload = function() {
 
     function checkCollision(checkObject, againstArray) {
         for (var i = 0; i < againstArray.length; i++) {
-          if(isOverlapping(checkObject, againstArray[i])){
-            return true;
-          }
+            if (isOverlapping(checkObject, againstArray[i])) {
+                return true;
+            }
         }
-        //  againstArray.forEach(function(againstObject){
-        //    console.log(isOverlapping(checkObject, againstObject));
-        //    if(isOverlapping(checkObject, againstObject)){
-        //      return true; //return doesn't break out of the checkCollision function
-        //    }
-        //  });
     }
 
-    function handleCollision() {
+    function loseGame() {
         header.textContent = "You've been destroyed!";
         instructions.remove();
         canvas.remove();
@@ -444,7 +447,7 @@ window.onload = function() {
                 racer2.y += racer2.dy / 60 * speed;
             }
             if (isOverlapping(racer, racer2)) {
-                handleCollision();
+                loseGame();
             }
             if (checkCollision(racer, hostileGamePieces)) {
                 instructions.innerHTML = "<h4>Player one destroyed!</h4>";
@@ -463,7 +466,7 @@ window.onload = function() {
             }
 
             if (playerOneDead && playerTwoDead) {
-                handleCollision();
+                loseGame();
             }
         }
 
@@ -478,7 +481,7 @@ window.onload = function() {
         context.drawImage(deathStarImage, 275, 65, 25, 25);
 
         if (!playerTwoActive && checkCollision(racer, hostileGamePieces)) {
-            handleCollision();
+            loseGame();
         }
 
         if (checkWin()) {
@@ -487,7 +490,5 @@ window.onload = function() {
 
         requestAnimationFrame(race);
     }
-
-    // requestAnimationFrame(race);
 
 }
