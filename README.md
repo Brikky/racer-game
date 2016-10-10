@@ -1,8 +1,8 @@
-## Luke Skyracer
+# Luke Skyracer
 ___
 Star Wars based arcade browser game designed and developed over weekend sprint. 
 
-## URL: [bricky.tech/racer-game/](bricky.tech/racer-game/)
+### URL: [bricky.tech/racer-game/](bricky.tech/racer-game/)
 
 ### Features
 ___
