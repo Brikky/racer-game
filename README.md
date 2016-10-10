@@ -18,6 +18,30 @@ ___
 - JavaScript
 - jQuery
 
+### Code Sample
+___
+```
+//Game Logic Functions
+    function isLegalXMovement(racerObject) {
+        var notLeft = racerObject.x >= 0 || racerObject.dx > 0;
+        var notRight = racerObject.x <= canvas.width - racerObject.width || racerObject.dx < 0;
+        return notLeft && notRight;
+    }
+
+    function isLegalYMovement(racerObject) {
+        var notAbove = racerObject.y >= 0 || racerObject.dy > 0;
+        var notBelow = racerObject.y <= canvas.height - racerObject.height || racerObject.dy < 0;
+        return notBelow && notAbove;
+    }
+
+    function isOverlapping(object1, object2) {
+        return !(object1.x + object1.width < object2.x ||
+            object2.x + object2.width < object1.x ||
+            object1.y + object1.height < object2.y ||
+            object2.y + object2.height < object1.y);
+    }
+```
+
 ### Future Work
 ___
 1. Improve responsiveness on small screens
