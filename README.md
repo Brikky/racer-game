@@ -1,6 +1,7 @@
 ## Description
 ___
 Star Wars based arcade browser game designed and developed over weekend sprint. 
+
 Click here to play: https://brikky.github.io/racer-game/
 
 ### Features
