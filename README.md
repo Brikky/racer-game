@@ -20,7 +20,7 @@ ___
 
 ### Code Sample
 ___
-```
+```JavaScript
 //Game Logic Functions
     function isLegalXMovement(racerObject) {
         var notLeft = racerObject.x >= 0 || racerObject.dx > 0;
