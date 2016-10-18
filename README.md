@@ -2,7 +2,7 @@
 ___
 Star Wars based arcade browser game designed and developed over weekend sprint. 
 
-### URL: [bricky.tech/racer-game/](www.bricky.tech/racer-game/)
+### URL: [bricky.tech/racer-game/](http://www.bricky.tech/racer-game/)
 
 ### Features
 ___
